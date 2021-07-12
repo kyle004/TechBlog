@@ -43,7 +43,7 @@ passport.use(new JWTStrategy({
   .then(user => cb(null, user))
   .catch(err => cb(err, null))))
 
-app.use(require('./controllers'))
+app.use(require('./routes'))
 // auth boilerplate end
 
 
