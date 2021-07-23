@@ -44,5 +44,5 @@ app.use(require('./routes'))
 
 require('./db/config')
   .sync()
-  .then(() => app.listen(process.env.PORT || 3000))
+  .then(() => app.listen(process.env.PORT || 4000))
   .catch(err => console.log(err))
