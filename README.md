@@ -54,7 +54,7 @@ THEN I am automatically signed out of the site
 
 ## Mock-Up
 
-The following animation demonstrates the application functionality:
+Website preview:
 
 ![Animation cycles through signing into the app, clicking on buttons, and updating blog posts.](./Assets/Screenshot.png) 
 
