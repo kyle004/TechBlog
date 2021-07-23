@@ -1,0 +1,75 @@
+<br>
+<div class="container">
+  <div class="row" id="content" data-blogID="{{editid}}">
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  const blogID = document.getElementById('content').getAttribute('data-blogID')
+  const editPost = () => {
+    axios.get(`/api/blogs/${blogID}`, {
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    })
+      .then(({ data: blog }) => {
+        console.log(blog)
+        document.getElementById('content').innerHTML = ''
+        axios.get(`/api/users/${blog.user_id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          }
+        })
+          .then(user => {
+            console.log(user)
+            let post = document.createElement('div')
+            post.innerHTML = `
+              <div class="col">
+                <div class="card border-dark mb-3">
+                  <div class="card-body">
+                    <h5 class="card-title">
+                      <input type="text" class="form-control" id="Title" placeholder='${blog.title}'>
+                    </h5>
+                    <h7 class="card-subtitle mb-2 text-muted">Created by ${user.data.name} at ${blog.createdAt}</h7>
+                    <p class="card-text">
+                      <textarea type="text" class="form-control" id="Text">${blog.text}
+                      </textarea>
+                    </p>
+                  </div>
+                  <div class="card-footer">
+                    <button class="submit btn btn-primary" id="submit">Submit Changes</button>
+                  </div>
+                </div>
+              </div>
+            `
+            document.getElementById('content').append(post)
+          })
+          .catch(err => console.log(err))
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
+  editPost()
+
+  document.addEventListener('click', event => {
+    event.preventDefault()
+      console.log(event.target)
+    if (event.target.classList.contains('submit')) {
+      axios.put(`/api/blogs/${blogID}`, {
+        title: document.getElementById('Title').value,
+        text: document.getElementById('Text').value
+      }, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        }
+      })
+        .then(() => {
+          editPost()
+          window.location = '/dashboard'
+        })
+        .catch(err => console.log(err))
+    }
+  })
+</script>

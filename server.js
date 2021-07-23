@@ -6,21 +6,18 @@ const passport = require('passport')
 const { User, Blog, Comment } = require('./models')
 const { Strategy: JWTStrategy, ExtractJwt } = require('passport-jwt')
 
-// handlebars stuff
-const exphbs = require('express-handlebars')
-const hbs = exphbs.create({})
+const xhb = require('express-handlebars')
+const xhbs = xhb.create({})
 
 const app = express()
 
-// more handlebars
-app.engine('handlebars', hbs.engine)
+app.engine('handlebars', xhbs.engine)
 app.set('view engine', 'handlebars')
 
 app.use(express.static(join(__dirname, 'public')))
 app.use(express.urlencoded({ extended: true }))
 app.use(express.json())
 
-// auth boilerplate server
 app.use(passport.initialize())
 app.use(passport.session())
 
@@ -44,8 +41,6 @@ passport.use(new JWTStrategy({
   .catch(err => cb(err, null))))
 
 app.use(require('./routes'))
-// auth boilerplate end
-
 
 require('./db/config')
   .sync()
